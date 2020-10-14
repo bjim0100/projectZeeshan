@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.forms import inlineformset_factory
-from .form import OrderForm
+from .form import OrderForm, CustomerForm
 from .models import *
 
 
@@ -75,7 +75,7 @@ def updateOrder(request,pk):
         if formset.is_valid():
             formset.save()
             return redirect('/')
-    context = {'formset': formset}
+   # context = {'formset': formset}
 
     context = {'form':formset}
     return render(request,'order_form.html', context)
@@ -93,3 +93,20 @@ def members(request):
     members = Customer.objects.all()
     context ={'members': members}
     return render(request,'members.html', context)
+
+
+def updatecustomer(request):
+    customer = Customer.objects.all()
+
+    form = CustomerForm()
+    if request.method =='POST':
+        form = CustomerForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+
+    form = form
+    context = {
+        'form':form
+    }
+    return render(request, 'customerupdate.html', context)
